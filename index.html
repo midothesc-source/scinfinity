@@ -1,117 +1,51 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SC Infinity In English</title>
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- React & ReactDOM -->
-  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-  <!-- Babel for JSX -->
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SC Infinity In English</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-slate-950 text-white font-sans antialiased min-h-screen">
-  <div id="root"></div>
+<body class="bg-slate-950 text-white min-h-screen flex flex-col justify-between p-6">
 
-  <script type="text/babel">
-    const { useState } = React;
+    <header class="max-w-md mx-auto w-full text-center py-4">
+        <h1 class="text-2xl font-bold bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent">
+            SC Infinity In English 🛡️
+        </h1>
+        <p class="text-xs text-slate-400 mt-1">The Ultimate English Learning Universe</p>
+    </header>
 
-    const levelsData = [
-      {
-        id: 1,
-        title: "Level 1: Beginner & Essential Idioms",
-        description: "Foundational phrasal verbs, everyday expressions, and basic prepositions.",
-        color: "from-green-500 to-emerald-700",
-        questions: [
-          {
-            q: "What does 'Give up' mean?",
-            options: ["Start doing something", "Stop trying / surrender", "Run very fast", "Fall asleep"],
-            correct: 1,
-            explanation: "معناها يستسلم أو يبطل محاولة (Stop trying)."
-          },
-          {
-            q: "Choose the correct meaning of 'Turn on':",
-            options: ["Switch off a device", "Activate or start a device", "Look behind you", "Throw away"],
-            correct: 1,
-            explanation: "معناها يشغل جهاز أو يفعله (Activate)."
-          }
-        ]
-      },
-      {
-        id: 2,
-        title: "Level 2: Intermediate & Colloquial Power",
-        description: "B1-B2 idioms, proverbs, and conversational collocations.",
-        color: "from-blue-500 to-indigo-700",
-        questions: [
-          {
-            q: "What does 'Bite the bullet' mean?",
-            options: ["Eat something spicy", "Face a difficult situation with courage", "Shoot a target", "Run away safely"],
-            correct: 1,
-            explanation: "معناها يقرر يواجه موقف صعب بشجاعة وبدون تردد."
-          },
-          {
-            q: "What is the meaning of 'Piece of cake'?",
-            options: ["Something very difficult", "Something very easy", "A delicious dessert", "A heavy task"],
-            correct: 1,
-            explanation: "تعبير شائع معناه 'سهل جداً' (Very easy)."
-          }
-        ]
-      },
-      {
-        id: 3,
-        title: "Level 3: Advanced & Cinematic Mastery",
-        description: "High-level idioms, slang, and advanced structures.",
-        color: "from-purple-600 to-pink-700",
-        questions: [
-          {
-            q: "What does 'Bury the hatchet' mean?",
-            options: ["Hide a weapon", "Make peace / end a feud", "Dig a deep hole", "Cut down a tree"],
-            correct: 1,
-            explanation: "معناها يتصالح وينهي الخلاف أو العداوة القديمة (Make peace)."
-          }
-        ]
-      }
-    ];
+    <main class="max-w-md mx-auto w-full space-y-4 my-auto">
+        <div class="p-5 rounded-2xl bg-gradient-to-r from-green-500 to-emerald-700 shadow-lg cursor-pointer hover:opacity-90 transition">
+            <h2 class="text-xl font-bold">Level 1: Beginner</h2>
+            <p class="text-sm opacity-90 mt-1">Essential idioms, everyday expressions, and prepositions.</p>
+        </div>
 
-    function App() {
-      const [selectedLevel, setSelectedLevel] = useState(null);
-      const [currentQIndex, setCurrentQIndex] = useState(0);
-      const [score, setScore] = useState(0);
-      const [showResult, setShowResult] = useState(false);
-      const [selectedAnswer, setSelectedAnswer] = useState(null);
-      const [isVIP, setIsVIP] = useState(false);
-      const [vipCode, setVipCode] = useState("");
+        <div class="p-5 rounded-2xl bg-gradient-to-r from-blue-500 to-indigo-700 shadow-lg cursor-pointer hover:opacity-90 transition">
+            <h2 class="text-xl font-bold">Level 2: Intermediate</h2>
+            <p class="text-sm opacity-90 mt-1">B1-B2 proverbs and conversational collocations.</p>
+        </div>
 
-      const handleAnswer = (optionIndex) => {
-        setSelectedAnswer(optionIndex);
-        const currentLevelObj = levelsData.find(l => l.id === selectedLevel);
-        if (optionIndex === currentLevelObj.questions[currentQIndex].correct) {
-          setScore(score + 10);
-        }
-      };
+        <div class="p-5 rounded-2xl bg-gradient-to-r from-purple-600 to-pink-700 shadow-lg cursor-pointer hover:opacity-90 transition flex justify-between items-center">
+            <div>
+                <h2 class="text-xl font-bold">Level 3: Advanced</h2>
+                <p class="text-sm opacity-90 mt-1">Cinematic idioms, slang, and mastery tracks.</p>
+            </div>
+            <span class="text-xs bg-black/40 px-2.5 py-1 rounded-full">🔒 VIP</span>
+        </div>
 
-      const nextQuestion = () => {
-        setSelectedAnswer(null);
-        const currentLevelObj = levelsData.find(l => l.id === selectedLevel);
-        if (currentQIndex + 1 < currentLevelObj.questions.length) {
-          setCurrentQIndex(currentQIndex + 1);
-        } else {
-          setShowResult(true);
-        }
-      };
+        <div class="mt-6 p-4 bg-slate-900 border border-slate-800 rounded-xl">
+            <h4 class="text-xs font-semibold mb-2 text-amber-400">VIP Activation Code</h4>
+            <div class="flex gap-2">
+                <input type="text" placeholder="Enter code (SCINFINITY2026)" class="flex-1 bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-500">
+                <button onclick="alert('تم تفعيل الـ VIP بنجاح يا سيادة الـ Chairman! 🚀')" class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold px-4 py-2 rounded-lg text-sm">Activate</button>
+            </div>
+        </div>
+    </main>
 
-      const activateVIP = (e) => {
-        e.preventDefault();
-        if (vipCode === "SCINFINITY2026") {
-          setIsVIP(true);
-          alert("تم تفعيل حساب الـ VIP بنجاح يا سيادة الـ Chairman! 🚀");
-        } else {
-          alert("كود غير صحيح، حاول مرة أخرى.");
-        }
-      };
+    <footer class="text-center text-xs text-slate-600 py-4">
+        &copy; 2026 SC Infinity In English. All Rights Reserved.
+    </footer>
 
-      return (
-        <div className="min-h-screen bg-slate-950 text-white p-4 font-sans">
-          <header className="max-w-xl mx-auto flex justify-between items-center py-4 border-b border
+</body>
+</html>
