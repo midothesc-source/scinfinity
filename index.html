@@ -5,15 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SC Infinity In English</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 </head>
-<body class="bg-slate-950 text-white min-h-screen">
-    <div id="root"></div>
+<body class="bg-slate-950 text-white min-h-screen flex flex-col justify-between p-4">
 
-    <script type="text/babel">
-        const { useState } = React;
+    <div class="max-w-md mx-auto w-full flex-1 flex flex-col">
+        <header class="text-center py-4 border-b border-slate-800 mb-6">
+            <h1 class="text-xl font-bold bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent">
+                SC Infinity In English 🛡️
+            </h1>
+            <p id="mode-text" class="text-xs text-slate-400 mt-1">🔓 Free Mode</p>
+        </header>
+
+        <main id="app-container" class="flex-1">
+            <!-- Dynamic Content -->
+        </main>
+    </div>
+
+    <footer class="text-center text-xs text-slate-600 py-3">
+        &copy; 2026 SC Infinity In English. All Rights Reserved.
+    </footer>
+
+    <script>
+        let isVIP = false;
+        let currentLevel = null;
+        let currentQIndex = 0;
+        let score = 0;
 
         const levelsData = [
             {
@@ -66,105 +82,108 @@
             }
         ];
 
-        function App() {
-            const [isVIP, setIsVIP] = useState(false);
-            const [vipInput, setVipInput] = useState("");
-            const [activeLevel, setActiveLevel] = useState(null);
-            const [currentQ, setCurrentQ] = useState(0);
-            const [score, setScore] = useState(0);
-            const [selectedOpt, setSelectedOpt] = useState(null);
-            const [showResult, setShowResult] = useState(false);
+        function render() {
+            const container = document.getElementById("app-container");
+            const modeText = document.getElementById("mode-text");
+            modeText.innerText = isVIP ? "⭐ VIP Chairman Mode" : "🔓 Free Mode";
 
-            const handleVIP = (e) => {
-                e.preventDefault();
-                if(vipInput.trim() === "SCINFINITY2026") {
-                    setIsVIP(true);
-                    alert("تم تفعيل الـ VIP بنجاح يا مido! 🚀");
-                } else {
-                    alert("الكود غير صحيح، حاول مرة أخرى.");
-                }
-            };
-
-            const handleAnswer = (idx) => {
-                setSelectedOpt(idx);
-                const lvl = levelsData.find(l => l.id === activeLevel);
-                if(idx === lvl.questions[currentQ].correct) {
-                    setScore(score + 10);
-                }
-            };
-
-            const nextQuestion = () => {
-                setSelectedOpt(null);
-                const lvl = levelsData.find(l => l.id === activeLevel);
-                if(currentQ + 1 < lvl.questions.length) {
-                    setCurrentQ(currentQ + 1);
-                } else {
-                    setShowResult(true);
-                }
-            };
-
-            return (
-                <div className="max-w-md mx-auto p-4 min-h-screen flex flex-col justify-between">
-                    <header className="text-center py-4 border-b border-slate-800">
-                        <h1 className="text-xl font-bold bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent">
-                            SC Infinity In English 🛡️
-                        </h1>
-                        <p className="text-xs text-slate-400 mt-1">{isVIP ? "⭐ VIP Chairman Mode" : "🔓 Free Mode"}</p>
-                    </header>
-
-                    <main className="my-6 flex-1">
-                        {!activeLevel ? (
-                            <div className="space-y-4">
-                                {levelsData.map((lvl) => (
-                                    <div 
-                                        key={lvl.id}
-                                        onClick={() => {
-                                            if(lvl.id === 3 && !isVIP) {
-                                                alert("هذا المستوى خاص بأعضاء الـ VIP! يرجى إدخال الكود.");
-                                                return;
-                                            }
-                                            setActiveLevel(lvl.id);
-                                            setCurrentQ(0);
-                                            setScore(0);
-                                            setShowResult(false);
-                                            setSelectedOpt(null);
-                                        }}
-                                        className={`p-5 rounded-2xl bg-gradient-to-r ${lvl.color} cursor-pointer shadow-lg hover:opacity-90 transition`}
-                                    >
-                                        <div className="flex justify-between items-center">
-                                            <h2 className="text-xl font-bold">{lvl.title}</h2>
-                                            {lvl.id === 3 && !isVIP && <span className="text-xs bg-black/40 px-2 py-1 rounded">🔒 VIP</span>}
-                                        </div>
-                                        <p className="text-sm opacity-90 mt-1">{lvl.desc}</p>
-                                    </div>
-                                ))}
-
-                                {!isVIP && (
-                                    <form onSubmit={handleVIP} className="mt-8 p-4 bg-slate-900 border border-slate-800 rounded-xl">
-                                        <h4 className="text-xs font-semibold mb-2 text-amber-400">VIP Activation Code</h4>
-                                        <div className="flex gap-2">
-                                            <input 
-                                                type="text" 
-                                                placeholder="Enter code (SCINFINITY2026)" 
-                                                value={vipInput}
-                                                onChange={(e) => setVipInput(e.target.value)}
-                                                className="flex-1 bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-500"
-                                            />
-                                            <button type="submit" className="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold px-4 py-2 rounded-lg text-sm">Activate</button>
-                                        </div>
-                                    </form>
-                                )}
+            if (currentLevel === null) {
+                let html = '<div class="space-y-4">';
+                levelsData.forEach(lvl => {
+                    let locked = (lvl.id === 3 && !isVIP);
+                    html += `
+                        <div onclick="selectLevel(${lvl.id})" class="p-5 rounded-2xl bg-gradient-to-r ${lvl.color} cursor-pointer shadow-lg hover:opacity-90 transition">
+                            <div class="flex justify-between items-center">
+                                <h2 class="text-xl font-bold">${lvl.title}</h2>
+                                ${locked ? '<span class="text-xs bg-black/40 px-2 py-1 rounded">🔒 VIP</span>' : ''}
                             </div>
-                        ) : (
-                            <div>
-                                <button 
-                                    onClick={() => setActiveLevel(null)}
-                                    className="text-xs text-slate-400 hover:text-white mb-4 block"
-                                >
-                                    ← Back to Levels
-                                </button>
+                            <p class="text-sm opacity-90 mt-1">${lvl.desc}</p>
+                        </div>
+                    `;
+                });
 
-                                {!showResult ? (
-                                    <div className="bg-slate-900 border border-slate-800 p-5 rounded-2xl">
-                                        {(() => {
-                                            const lvl = levelsData.find(l => l.id ===
+                if (!isVIP) {
+                    html += `
+                        <div class="mt-8 p-4 bg-slate-900 border border-slate-800 rounded-xl">
+                            <h4 class="text-xs font-semibold mb-2 text-amber-400">VIP Activation Code</h4>
+                            <div class="flex gap-2">
+                                <input id="vip-code" type="text" placeholder="Enter code (SCINFINITY2026)" class="flex-1 bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-500">
+                                <button onclick="activateVIP()" class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold px-4 py-2 rounded-lg text-sm">Activate</button>
+                            </div>
+                        </div>
+                    `;
+                }
+                html += '</div>';
+                container.innerHTML = html;
+            } else {
+                const lvl = levelsData.find(l => l.id === currentLevel);
+                if (currentQIndex < lvl.questions.length) {
+                    const q = lvl.questions[currentQIndex];
+                    let optsHtml = '';
+                    q.options.forEach((opt, idx) => {
+                        optsHtml += `<button onclick="checkAnswer(${idx})" class="w-full text-left p-3 rounded-xl border border-slate-700 bg-slate-800 hover:bg-slate-700 text-sm transition mb-2">${opt}</button>`;
+                    });
+
+                    container.innerHTML = `
+                        <button onclick="currentLevel = null; render();" class="text-xs text-slate-400 hover:text-white mb-4 block">← Back to Levels</button>
+                        <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl">
+                            <div class="flex justify-between text-xs text-slate-400 mb-3">
+                                <span>${lvl.title}</span>
+                                <span>Q ${currentQIndex + 1} of ${lvl.questions.length}</span>
+                            </div>
+                            <h3 class="text-md font-semibold mb-4">${q.q}</h3>
+                            <div class="space-y-2">${optsHtml}</div>
+                        </div>
+                    `;
+                } else {
+                    container.innerHTML = `
+                        <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl text-center">
+                            <h3 class="text-xl font-bold mb-2">Quiz Completed! 🎉</h3>
+                            <p class="text-slate-400 text-sm mb-4">Your Score:</p>
+                            <div class="text-3xl font-extrabold text-amber-400 mb-6">${score} XP</div>
+                            <button onclick="currentLevel = null; currentQIndex = 0; score = 0; render();" class="w-full bg-amber-500 text-slate-950 font-bold py-2.5 rounded-xl text-sm">Return to Levels</button>
+                        </div>
+                    `;
+                }
+            }
+        }
+
+        function selectLevel(id) {
+            if (id === 3 && !isVIP) {
+                alert("هذا المستوى خاص بأعضاء الـ VIP! يرجى إدخال الكود.");
+                return;
+            }
+            currentLevel = id;
+            currentQIndex = 0;
+            score = 0;
+            render();
+        }
+
+        function activateVIP() {
+            const val = document.getElementById("vip-code").value.trim();
+            if (val === "SCINFINITY2026") {
+                isVIP = true;
+                alert("تم تفعيل الـ VIP بنجاح يا مido! 🚀");
+                render();
+            } else {
+                alert("الكود غير صحيح، حاول مرة أخرى.");
+            }
+        }
+
+        function checkAnswer(idx) {
+            const lvl = levelsData.find(l => l.id === currentLevel);
+            const q = lvl.questions[currentQIndex];
+            if (idx === q.correct) {
+                score += 10;
+                alert("إجابة صحيحة! 🎉\n" + q.explanation);
+            } else {
+                alert("إجابة خاطئة.\n" + q.explanation);
+            }
+            currentQIndex++;
+            render();
+        }
+
+        render();
+    </script>
+</body>
+</html>
