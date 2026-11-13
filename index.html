@@ -5,47 +5,166 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SC Infinity In English</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 </head>
-<body class="bg-slate-950 text-white min-h-screen flex flex-col justify-between p-6">
+<body class="bg-slate-950 text-white min-h-screen">
+    <div id="root"></div>
 
-    <header class="max-w-md mx-auto w-full text-center py-4">
-        <h1 class="text-2xl font-bold bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent">
-            SC Infinity In English 🛡️
-        </h1>
-        <p class="text-xs text-slate-400 mt-1">The Ultimate English Learning Universe</p>
-    </header>
+    <script type="text/babel">
+        const { useState } = React;
 
-    <main class="max-w-md mx-auto w-full space-y-4 my-auto">
-        <div class="p-5 rounded-2xl bg-gradient-to-r from-green-500 to-emerald-700 shadow-lg cursor-pointer hover:opacity-90 transition">
-            <h2 class="text-xl font-bold">Level 1: Beginner</h2>
-            <p class="text-sm opacity-90 mt-1">Essential idioms, everyday expressions, and prepositions.</p>
-        </div>
+        const levelsData = [
+            {
+                id: 1,
+                title: "Level 1: Beginner",
+                desc: "Essential idioms, everyday expressions, and prepositions.",
+                color: "from-green-500 to-emerald-700",
+                questions: [
+                    {
+                        q: "What does 'Give up' mean?",
+                        options: ["Start doing something", "Stop trying / surrender", "Run very fast", "Fall asleep"],
+                        correct: 1,
+                        explanation: "معناها يستسلم أو يبطل محاولة."
+                    },
+                    {
+                        q: "Choose the correct meaning of 'Turn on':",
+                        options: ["Switch off a device", "Activate or start a device", "Look behind you", "Throw away"],
+                        correct: 1,
+                        explanation: "معناها يشغل جهاز أو يفعله."
+                    }
+                ]
+            },
+            {
+                id: 2,
+                title: "Level 2: Intermediate",
+                desc: "B1-B2 proverbs and conversational collocations.",
+                color: "from-blue-500 to-indigo-700",
+                questions: [
+                    {
+                        q: "What does 'Bite the bullet' mean?",
+                        options: ["Eat something spicy", "Face a difficult situation with courage", "Shoot a target", "Run away safely"],
+                        correct: 1,
+                        explanation: "معناها يقرر يواجه موقف صعب بشجاعة."
+                    }
+                ]
+            },
+            {
+                id: 3,
+                title: "Level 3: Advanced",
+                desc: "Cinematic idioms, slang, and mastery tracks.",
+                color: "from-purple-600 to-pink-700",
+                questions: [
+                    {
+                        q: "What does 'Bury the hatchet' mean?",
+                        options: ["Hide a weapon", "Make peace / end a feud", "Dig a deep hole", "Cut down a tree"],
+                        correct: 1,
+                        explanation: "معناها يتصالح وينهي الخلاف القديم."
+                    }
+                ]
+            }
+        ];
 
-        <div class="p-5 rounded-2xl bg-gradient-to-r from-blue-500 to-indigo-700 shadow-lg cursor-pointer hover:opacity-90 transition">
-            <h2 class="text-xl font-bold">Level 2: Intermediate</h2>
-            <p class="text-sm opacity-90 mt-1">B1-B2 proverbs and conversational collocations.</p>
-        </div>
+        function App() {
+            const [isVIP, setIsVIP] = useState(false);
+            const [vipInput, setVipInput] = useState("");
+            const [activeLevel, setActiveLevel] = useState(null);
+            const [currentQ, setCurrentQ] = useState(0);
+            const [score, setScore] = useState(0);
+            const [selectedOpt, setSelectedOpt] = useState(null);
+            const [showResult, setShowResult] = useState(false);
 
-        <div class="p-5 rounded-2xl bg-gradient-to-r from-purple-600 to-pink-700 shadow-lg cursor-pointer hover:opacity-90 transition flex justify-between items-center">
-            <div>
-                <h2 class="text-xl font-bold">Level 3: Advanced</h2>
-                <p class="text-sm opacity-90 mt-1">Cinematic idioms, slang, and mastery tracks.</p>
-            </div>
-            <span class="text-xs bg-black/40 px-2.5 py-1 rounded-full">🔒 VIP</span>
-        </div>
+            const handleVIP = (e) => {
+                e.preventDefault();
+                if(vipInput.trim() === "SCINFINITY2026") {
+                    setIsVIP(true);
+                    alert("تم تفعيل الـ VIP بنجاح يا مido! 🚀");
+                } else {
+                    alert("الكود غير صحيح، حاول مرة أخرى.");
+                }
+            };
 
-        <div class="mt-6 p-4 bg-slate-900 border border-slate-800 rounded-xl">
-            <h4 class="text-xs font-semibold mb-2 text-amber-400">VIP Activation Code</h4>
-            <div class="flex gap-2">
-                <input type="text" placeholder="Enter code (SCINFINITY2026)" class="flex-1 bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-500">
-                <button onclick="alert('تم تفعيل الـ VIP بنجاح يا سيادة الـ Chairman! 🚀')" class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold px-4 py-2 rounded-lg text-sm">Activate</button>
-            </div>
-        </div>
-    </main>
+            const handleAnswer = (idx) => {
+                setSelectedOpt(idx);
+                const lvl = levelsData.find(l => l.id === activeLevel);
+                if(idx === lvl.questions[currentQ].correct) {
+                    setScore(score + 10);
+                }
+            };
 
-    <footer class="text-center text-xs text-slate-600 py-4">
-        &copy; 2026 SC Infinity In English. All Rights Reserved.
-    </footer>
+            const nextQuestion = () => {
+                setSelectedOpt(null);
+                const lvl = levelsData.find(l => l.id === activeLevel);
+                if(currentQ + 1 < lvl.questions.length) {
+                    setCurrentQ(currentQ + 1);
+                } else {
+                    setShowResult(true);
+                }
+            };
 
-</body>
-</html>
+            return (
+                <div className="max-w-md mx-auto p-4 min-h-screen flex flex-col justify-between">
+                    <header className="text-center py-4 border-b border-slate-800">
+                        <h1 className="text-xl font-bold bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent">
+                            SC Infinity In English 🛡️
+                        </h1>
+                        <p className="text-xs text-slate-400 mt-1">{isVIP ? "⭐ VIP Chairman Mode" : "🔓 Free Mode"}</p>
+                    </header>
+
+                    <main className="my-6 flex-1">
+                        {!activeLevel ? (
+                            <div className="space-y-4">
+                                {levelsData.map((lvl) => (
+                                    <div 
+                                        key={lvl.id}
+                                        onClick={() => {
+                                            if(lvl.id === 3 && !isVIP) {
+                                                alert("هذا المستوى خاص بأعضاء الـ VIP! يرجى إدخال الكود.");
+                                                return;
+                                            }
+                                            setActiveLevel(lvl.id);
+                                            setCurrentQ(0);
+                                            setScore(0);
+                                            setShowResult(false);
+                                            setSelectedOpt(null);
+                                        }}
+                                        className={`p-5 rounded-2xl bg-gradient-to-r ${lvl.color} cursor-pointer shadow-lg hover:opacity-90 transition`}
+                                    >
+                                        <div className="flex justify-between items-center">
+                                            <h2 className="text-xl font-bold">{lvl.title}</h2>
+                                            {lvl.id === 3 && !isVIP && <span className="text-xs bg-black/40 px-2 py-1 rounded">🔒 VIP</span>}
+                                        </div>
+                                        <p className="text-sm opacity-90 mt-1">{lvl.desc}</p>
+                                    </div>
+                                ))}
+
+                                {!isVIP && (
+                                    <form onSubmit={handleVIP} className="mt-8 p-4 bg-slate-900 border border-slate-800 rounded-xl">
+                                        <h4 className="text-xs font-semibold mb-2 text-amber-400">VIP Activation Code</h4>
+                                        <div className="flex gap-2">
+                                            <input 
+                                                type="text" 
+                                                placeholder="Enter code (SCINFINITY2026)" 
+                                                value={vipInput}
+                                                onChange={(e) => setVipInput(e.target.value)}
+                                                className="flex-1 bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-500"
+                                            />
+                                            <button type="submit" className="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold px-4 py-2 rounded-lg text-sm">Activate</button>
+                                        </div>
+                                    </form>
+                                )}
+                            </div>
+                        ) : (
+                            <div>
+                                <button 
+                                    onClick={() => setActiveLevel(null)}
+                                    className="text-xs text-slate-400 hover:text-white mb-4 block"
+                                >
+                                    ← Back to Levels
+                                </button>
+
+                                {!showResult ? (
+                                    <div className="bg-slate-900 border border-slate-800 p-5 rounded-2xl">
+                                        {(() => {
+                                            const lvl = levelsData.find(l => l.id ===
